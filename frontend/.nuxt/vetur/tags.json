@@ -1,0 +1,35 @@
+{
+  "BaseButton": {
+    "description": "Auto imported from components/base/BaseButton.vue"
+  },
+  "BaseCard": {
+    "description": "Auto imported from components/base/BaseCard.vue"
+  },
+  "BaseIcon": {
+    "description": "Auto imported from components/base/BaseIcon.vue"
+  },
+  "BaseConnectWallet": {
+    "description": "Auto imported from components/base/ConnectWallet.vue"
+  },
+  "Footer": {
+    "description": "Auto imported from components/footer/Footer.vue"
+  },
+  "FooterSocialNetworks": {
+    "description": "Auto imported from components/footer/SocialNetworks.vue"
+  },
+  "MintInput": {
+    "description": "Auto imported from components/mint/MintInput.vue"
+  },
+  "NavBar": {
+    "description": "Auto imported from components/nav/NavBar.vue"
+  },
+  "NavIcon": {
+    "description": "Auto imported from components/nav/NavIcon.vue"
+  },
+  "UtilityBlock": {
+    "description": "Auto imported from components/utility/UtilityBlock.vue"
+  },
+  "UtilityCard": {
+    "description": "Auto imported from components/utility/UtilityCard.vue"
+  }
+}

@@ -1,0 +1,30 @@
+* {
+  font-family: 'Josefin Sans';
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0 auto;
+  background-color: #020931;
+  color: #ffffff;
+}
+main {
+  margin: 0 auto;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.1s;
+}
+.page-enter,
+.page-leave-active {
+  opacity: 0;
+}
+
+#__layout,
+#__nuxt {
+  width: 100%;
+}
