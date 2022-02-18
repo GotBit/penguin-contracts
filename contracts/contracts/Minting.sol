@@ -11,7 +11,8 @@ interface IERC721Custom {
 contract Minting is Ownable {
     IERC721Custom public nft;
     uint256 public startDate;
-    bytes32 whiteList;
+    bytes32 whiteListRoot;
+    bytes32 OGRoot;
 
     uint256 public ogQuantity = 4;
     uint256 public whitlistQuantity = 2;
@@ -19,39 +20,42 @@ contract Minting is Ownable {
 
     mapping(address => uint256) public minted;
 
-    // before merkle tree
-    mapping(address => bool) public ogs;
-    mapping(address => bool) public whitelist;
-
-    ///for tests/////////////////////////
-    function setOG(address user) external onlyOwner {
-        ogs[user] = true;
-    }
-
-    function setWhitelist(address user) external onlyOwner {
-        whitelist[user] = true;
-    }
-
-    ///////////////////////////////////////
-
     /// @dev verifies ogs
-    /// @param sender address of user
     /// @param proof array of bytes for merkle tree verifing
-    function verifyOG(address sender, bytes32[] memory proof) public view returns (bool) {
-        // TODO: merkle tree proof
-        return ogs[sender];
+    /// @param root tree's root
+    /// @param leaf keccak256 of user address
+    function verifyOG(
+        bytes32[] memory proof,
+        bytes32 root,
+        bytes32 leaf
+    ) public pure returns (bool) {
+        bytes32 hash = leaf;
+        for (uint256 i = 0; i < proof.length; i++) {
+            bytes32 proofElement = proof[i];
+            hash = hash < proofElement
+                ? keccak256(abi.encodePacked(hash, proofElement))
+                : keccak256(abi.encodePacked(proofElement, hash));
+        }
+        return hash == root;
     }
 
     /// @dev verifies whitelist
-    /// @param sender address of user
     /// @param proof array of bytes for merkle tree verifing
-    function verifyWhitelist(address sender, bytes32[] memory proof)
-        public
-        view
-        returns (bool)
-    {
-        // TODO: merkle tree proof
-        return whitelist[sender];
+    /// @param root tree's root
+    /// @param leaf keccak256 of user address
+    function verifyWhitelist(
+        bytes32[] memory proof,
+        bytes32 root,
+        bytes32 leaf
+    ) public pure returns (bool) {
+        bytes32 hash = leaf;
+        for (uint256 i = 0; i < proof.length; i++) {
+            bytes32 proofElement = proof[i];
+            hash = hash < proofElement
+                ? keccak256(abi.encodePacked(hash, proofElement))
+                : keccak256(abi.encodePacked(proofElement, hash));
+        }
+        return hash == root;
     }
 
     /// @dev mints nft to user
@@ -60,13 +64,14 @@ contract Minting is Ownable {
     function mint(uint256 quantity, bytes32[] memory proof) external {
         console.log('start date', startDate);
         require(
-            startDate != 0 && block.timestamp < startDate + 7 days,
+            (startDate != 0) && (block.timestamp < startDate + 7 days),
             'Mint have not started yet'
         );
 
         if (block.timestamp - startDate < 1 days) {
-            bool isOG = verifyOG(msg.sender, proof);
-            bool isWhitelist = verifyWhitelist(msg.sender, proof);
+            bytes32 leaf = keccak256(abi.encode(msg.sender));
+            bool isOG = verifyOG(proof, OGRoot, leaf);
+            bool isWhitelist = verifyWhitelist(proof, whiteListRoot, leaf);
 
             console.log(isOG, isWhitelist);
 
@@ -104,9 +109,11 @@ contract Minting is Ownable {
     }
 
     /// @dev Set whitelist
-    /// @param _whiteList mercle proof coding whitelist
-    function createWhitelist(bytes32 _whiteList) external onlyOwner {
-        whiteList = _whiteList;
+    /// @param _whiteListRoot whitelist's tree root
+    /// @param _OGRoot OG's tree root
+    function createWhitelist(bytes32 _whiteListRoot, bytes32 _OGRoot) external onlyOwner {
+        whiteListRoot = _whiteListRoot;
+        OGRoot = _OGRoot;
     }
 
     constructor(address nft_) {
