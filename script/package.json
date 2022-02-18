@@ -1,8 +1,13 @@
 {
+  "scripts": {
+    "start": "tsc -p . && node dist/index.js"
+  },
   "devDependencies": {
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@pinata/sdk": "^1.1.23"
+    "@pinata/sdk": "^1.1.23",
+    "@types/node": "^17.0.18",
+    "fs": "^0.0.1-security"
   }
 }
