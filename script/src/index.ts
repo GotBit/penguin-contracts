@@ -4,6 +4,7 @@ import pinataSDK from '@pinata/sdk'
 import secrets from './.secrets'
 
 const pinata = pinataSDK(secrets.API_KEY, secrets.API_SECRET)
+const pinataURL = 'https://gateway.pinata.cloud/ipfs/'
 
 const FILES_FOLDER = 'files'
 const HASHES = 'hashes.json'
@@ -11,7 +12,7 @@ const HASHES = 'hashes.json'
 async function pinFile(fileStream: fs.ReadStream): Promise<string | null> {
   try {
     const result = await pinata.pinFileToIPFS(fileStream)
-    return result.IpfsHash
+    return pinataURL + result.IpfsHash
   } catch (e) {
     console.error(e)
     return null
@@ -44,8 +45,7 @@ async function main() {
     console.log('Loading...', file)
 
     const fileStream = fs.createReadStream(path.join(filesPath, file))
-    // const hash = await pinFile(fileStream)
-    const hash = 'test'
+    const hash = await pinFile(fileStream)
     if (hash) hashes[file] = hash
     else console.log('Problem!', file)
   }
