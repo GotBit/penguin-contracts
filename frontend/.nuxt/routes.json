@@ -2,8 +2,8 @@
   {
     "name": "index",
     "path": "/",
-    "component": "/home/stepan/projects/penguin-frontend/pages/index.vue",
+    "component": "/home/stepan/projects/penguin-app/frontend/pages/index.vue",
     "chunkName": "pages/index",
-    "_name": "_2c3c2199"
+    "_name": "_7e200e47"
   }
 ]

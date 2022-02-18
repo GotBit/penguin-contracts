@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full text-center bg-[#10184E] pb-11 relative">
-    <SocialNetworks class="mx-auto" />
+  <div class="w-full text-center bg-[#10184E] pb-11 relative bg-shadow">
+    <SocialNetworks class="absolute left-[50%] translate-x-[-50%] translate-y-[-50%]" />
     <img class="pt-[180px] mx-auto" src="@/static/logo.png" />
     <div class="mt-20 mb-28 w-full max-w-[1920px] flex justify-around mx-auto">
       <div class="flex flex-col">
@@ -100,4 +100,11 @@ export default Vue.extend({
   }),
 })
 </script>
-<style scoped></style>
+<style scoped>
+.bg-shadow {
+  background-image: url('@/static/icons/footer/socials/rectangle.svg'),
+    url('@/static/icons/footer/socials/ellipse.svg');
+  background-repeat: no-repeat, no-repeat;
+  background-position: center -70px, center -70px;
+}
+</style>

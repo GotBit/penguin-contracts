@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full bg-dark text-center pb-[290px]">
+  <div class="w-full bg-dark text-center pb-[290px] pt-[136px]">
     <h1 class="text-[60px] font-bold bg-dark">Utility</h1>
     <span class="text-[#BDC4CE] text-[22px]">
       As our community grows, more utility will be added

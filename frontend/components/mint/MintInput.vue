@@ -1,21 +1,22 @@
 <template>
-  <div class="flex flex-col relative">
+  <div class="flex flex-col relative select-none">
     <input
       v-model="mainVal"
-      class="w-[313px] h-[100px] rounded-full text-center text-[#303030] text-[60px] font-bold bg focus:border-0"
+      class="w-[313px] h-[100px] select-none rounded-full text-center text-[#303030] text-[60px] font-bold bg focus:border-0"
       type="number"
       min="0"
       max="100"
       @input="onChange"
     />
     <div
-      class="cursor-pointer absolute top-[14px] left-4 bg-button rounded-full w-[70px] h-[70px] flex justify-center items-center"
+      class="select-none cursor-pointer absolute top-[14px] left-4 bg-button rounded-full w-[70px] h-[70px] flex justify-center items-center"
       @click="dicrease"
     >
       <img src="@/static/icons/-.svg" />
     </div>
     <div
-      class="ursor-pointer absolute top-[14px] right-4 bg-button rounded-full w-[70px] h-[70px] flex justify-center items-center"
+      class="select-none ursor-pointer absolute top-[14px] right-4 rounded-full w-[70px] h-[70px] flex justify-center items-center"
+      :class="mainVal >= max ? 'bg-[#00000050]' : 'bg-button'"
       @click="increase"
     >
       <img src="@/static/icons/+.svg" />
@@ -57,6 +58,8 @@ export default Vue.extend({
     dicrease() {
       if (this.mainVal > this.min) {
         this.mainVal--
+      } else {
+        this.mainVal = this.min
       }
     },
   },
