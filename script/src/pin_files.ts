@@ -5,12 +5,17 @@ import secrets from './.secrets'
 
 const pinata = pinataSDK(secrets.API_KEY, secrets.API_SECRET)
 const pinataURL = 'https://gateway.pinata.cloud/ipfs/'
+const pinataGateway = 'https://penguinkarts.mypinata.cloud/ipfs/'
 
 const MAX_PATCH = 3
 
 const FILES_FOLDER = 'files-test'
 const HASHES = 'hashes.json'
-const URLS = 'urls.json'
+export const URLS = 'urls.json'
+
+export interface Hashes {
+  [name: string]: string
+}
 
 async function pinFile(fileStream: fs.ReadStream): Promise<string | null> {
   try {
@@ -20,10 +25,6 @@ async function pinFile(fileStream: fs.ReadStream): Promise<string | null> {
     console.error(e)
     return null
   }
-}
-
-interface Hashes {
-  [name: string]: string
 }
 
 function loadHashes(): Hashes {
@@ -57,7 +58,8 @@ async function loadPatch(
 function saveURLs(hashes: Hashes) {
   const urls = {} as Hashes
   for (const key of Object.keys(hashes)) {
-    urls[key] = pinataURL + hashes[key]
+    // urls[key] = pinataURL + hashes[key]
+    urls[key] = pinataGateway + hashes[key]
   }
   const urlsPath = path.join(__dirname, '..', URLS)
   fs.writeFileSync(urlsPath, JSON.stringify(urls, null, 2))
@@ -86,7 +88,6 @@ async function main() {
       saveHashes(hashes)
       promises = []
       fileNames = []
-
       console.log('Next patch')
     }
   }
@@ -97,12 +98,12 @@ async function main() {
     saveHashes(hashes)
     promises = []
     fileNames = []
-
-    console.log('Next patch')
   }
 
   saveHashes(hashes)
   saveURLs(hashes)
 }
 
-main()
+if (require.main === module) {
+  main()
+}
