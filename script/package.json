@@ -1,7 +1,8 @@
 {
   "scripts": {
     "pin": "tsc -p . && node dist/pin_files.js",
-    "create": "tsc -p . && node dist/create_uri.js"
+    "create": "tsc -p . && node dist/create_uri.js",
+    "put": "tsc -p . && node dist/put_uri.js"
   },
   "devDependencies": {
     "typescript": "^4.5.5"

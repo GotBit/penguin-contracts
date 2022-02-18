@@ -7,9 +7,9 @@ const pinata = pinataSDK(secrets.API_KEY, secrets.API_SECRET)
 const pinataURL = 'https://gateway.pinata.cloud/ipfs/'
 const pinataGateway = 'https://penguinkarts.mypinata.cloud/ipfs/'
 
-const MAX_PATCH = 3
+const MAX_BATCH = 10
 
-const FILES_FOLDER = 'files-test'
+const FILES_FOLDER = 'files'
 const HASHES = 'hashes.json'
 export const URLS = 'urls.json'
 
@@ -38,12 +38,12 @@ function saveHashes(hashes: Hashes) {
   fs.writeFileSync(hashesPath, JSON.stringify(hashes, null, 2))
 }
 
-async function loadPatch(
+async function loadBatch(
   promises: Promise<string | null>[],
   fileNames: string[],
   hashes: Hashes
 ): Promise<Hashes> {
-  console.log('Loading patch...')
+  console.log('Loading Batch...')
   const resolves = await Promise.all(promises)
 
   for (let i = 0; i < resolves.length; i++) {
@@ -76,25 +76,25 @@ async function main() {
 
   for (const file of files) {
     if (Object.keys(hashes).includes(file)) continue
-    console.log('Add to patch', file)
+    console.log('Add to Batch', file)
 
     const fileStream = fs.createReadStream(path.join(filesPath, file))
     promises.push(pinFile(fileStream))
     fileNames.push(file)
 
-    if (promises.length >= MAX_PATCH) {
-      hashes = await loadPatch(promises, fileNames, hashes)
+    if (promises.length >= MAX_BATCH) {
+      hashes = await loadBatch(promises, fileNames, hashes)
 
       saveHashes(hashes)
       promises = []
       fileNames = []
-      console.log('Next patch')
+      console.log('Next Batch')
     }
   }
 
   // resolve promises that left
   if (promises.length > 0) {
-    hashes = await loadPatch(promises, fileNames, hashes)
+    hashes = await loadBatch(promises, fileNames, hashes)
     saveHashes(hashes)
     promises = []
     fileNames = []

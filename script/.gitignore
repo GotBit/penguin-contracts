@@ -2,3 +2,5 @@ node_modules/
 src/.secrets.ts
 files/
 dist
+*/**/.DS_Store
+uris/
