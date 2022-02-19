@@ -21,31 +21,33 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MintingInterface extends ethers.utils.Interface {
   functions: {
-    "createWhitelist(bytes32)": FunctionFragment;
+    "OGRoot()": FunctionFragment;
+    "changeDuration(uint256)": FunctionFragment;
+    "duration()": FunctionFragment;
     "maxQuantity()": FunctionFragment;
     "mint(uint256,bytes32[])": FunctionFragment;
     "minted(address)": FunctionFragment;
     "nft()": FunctionFragment;
     "ogQuantity()": FunctionFragment;
-    "ogs(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "setOG(address)": FunctionFragment;
-    "setWhitelist(address)": FunctionFragment;
+    "saveRootOg(bytes32)": FunctionFragment;
+    "saveRootWhitelist(bytes32)": FunctionFragment;
     "startDate()": FunctionFragment;
     "startMinting()": FunctionFragment;
     "stopMinting()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "verifyOG(address,bytes32[])": FunctionFragment;
-    "verifyWhitelist(address,bytes32[])": FunctionFragment;
-    "whitelist(address)": FunctionFragment;
+    "verify(bytes32[],bytes32,bytes32)": FunctionFragment;
+    "whitelistRoot()": FunctionFragment;
     "whitlistQuantity()": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "OGRoot", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "createWhitelist",
-    values: [BytesLike]
+    functionFragment: "changeDuration",
+    values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "duration", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "maxQuantity",
     values?: undefined
@@ -60,16 +62,18 @@ interface MintingInterface extends ethers.utils.Interface {
     functionFragment: "ogQuantity",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "ogs", values: [string]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "setOG", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "setWhitelist",
-    values: [string]
+    functionFragment: "saveRootOg",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "saveRootWhitelist",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "startDate", values?: undefined): string;
   encodeFunctionData(
@@ -85,23 +89,24 @@ interface MintingInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "verifyOG",
-    values: [string, BytesLike[]]
+    functionFragment: "verify",
+    values: [BytesLike[], BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "verifyWhitelist",
-    values: [string, BytesLike[]]
+    functionFragment: "whitelistRoot",
+    values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "whitelist", values: [string]): string;
   encodeFunctionData(
     functionFragment: "whitlistQuantity",
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "OGRoot", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "createWhitelist",
+    functionFragment: "changeDuration",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "duration", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "maxQuantity",
     data: BytesLike
@@ -110,15 +115,14 @@ interface MintingInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "minted", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "nft", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ogQuantity", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "ogs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setOG", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "saveRootOg", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setWhitelist",
+    functionFragment: "saveRootWhitelist",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "startDate", data: BytesLike): Result;
@@ -134,12 +138,11 @@ interface MintingInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "verifyOG", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "verify", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "verifyWhitelist",
+    functionFragment: "whitelistRoot",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "whitelist", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "whitlistQuantity",
     data: BytesLike
@@ -200,10 +203,14 @@ export class Minting extends BaseContract {
   interface: MintingInterface;
 
   functions: {
-    createWhitelist(
-      _whiteList: BytesLike,
+    OGRoot(overrides?: CallOverrides): Promise<[string]>;
+
+    changeDuration(
+      _duration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    duration(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     maxQuantity(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -219,21 +226,19 @@ export class Minting extends BaseContract {
 
     ogQuantity(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    ogs(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
-
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setOG(
-      user: string,
+    saveRootOg(
+      _OGRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setWhitelist(
-      user: string,
+    saveRootWhitelist(
+      _whitelistRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -252,27 +257,26 @@ export class Minting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    verifyOG(
-      sender: string,
+    verify(
       proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    verifyWhitelist(
-      sender: string,
-      proof: BytesLike[],
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    whitelist(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
+    whitelistRoot(overrides?: CallOverrides): Promise<[string]>;
 
     whitlistQuantity(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
-  createWhitelist(
-    _whiteList: BytesLike,
+  OGRoot(overrides?: CallOverrides): Promise<string>;
+
+  changeDuration(
+    _duration: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  duration(overrides?: CallOverrides): Promise<BigNumber>;
 
   maxQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -288,21 +292,19 @@ export class Minting extends BaseContract {
 
   ogQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
-  ogs(arg0: string, overrides?: CallOverrides): Promise<boolean>;
-
   owner(overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setOG(
-    user: string,
+  saveRootOg(
+    _OGRoot: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setWhitelist(
-    user: string,
+  saveRootWhitelist(
+    _whitelistRoot: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -321,27 +323,26 @@ export class Minting extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  verifyOG(
-    sender: string,
+  verify(
     proof: BytesLike[],
+    root: BytesLike,
+    leaf: BytesLike,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  verifyWhitelist(
-    sender: string,
-    proof: BytesLike[],
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  whitelist(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+  whitelistRoot(overrides?: CallOverrides): Promise<string>;
 
   whitlistQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
-    createWhitelist(
-      _whiteList: BytesLike,
+    OGRoot(overrides?: CallOverrides): Promise<string>;
+
+    changeDuration(
+      _duration: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    duration(overrides?: CallOverrides): Promise<BigNumber>;
 
     maxQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -357,15 +358,16 @@ export class Minting extends BaseContract {
 
     ogQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
-    ogs(arg0: string, overrides?: CallOverrides): Promise<boolean>;
-
     owner(overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    setOG(user: string, overrides?: CallOverrides): Promise<void>;
+    saveRootOg(_OGRoot: BytesLike, overrides?: CallOverrides): Promise<void>;
 
-    setWhitelist(user: string, overrides?: CallOverrides): Promise<void>;
+    saveRootWhitelist(
+      _whitelistRoot: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     startDate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -378,19 +380,14 @@ export class Minting extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    verifyOG(
-      sender: string,
+    verify(
       proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    verifyWhitelist(
-      sender: string,
-      proof: BytesLike[],
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    whitelist(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+    whitelistRoot(overrides?: CallOverrides): Promise<string>;
 
     whitlistQuantity(overrides?: CallOverrides): Promise<BigNumber>;
   };
@@ -414,10 +411,14 @@ export class Minting extends BaseContract {
   };
 
   estimateGas: {
-    createWhitelist(
-      _whiteList: BytesLike,
+    OGRoot(overrides?: CallOverrides): Promise<BigNumber>;
+
+    changeDuration(
+      _duration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    duration(overrides?: CallOverrides): Promise<BigNumber>;
 
     maxQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -433,21 +434,19 @@ export class Minting extends BaseContract {
 
     ogQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
-    ogs(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setOG(
-      user: string,
+    saveRootOg(
+      _OGRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setWhitelist(
-      user: string,
+    saveRootWhitelist(
+      _whitelistRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -466,28 +465,27 @@ export class Minting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    verifyOG(
-      sender: string,
+    verify(
       proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    verifyWhitelist(
-      sender: string,
-      proof: BytesLike[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    whitelist(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    whitelistRoot(overrides?: CallOverrides): Promise<BigNumber>;
 
     whitlistQuantity(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    createWhitelist(
-      _whiteList: BytesLike,
+    OGRoot(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    changeDuration(
+      _duration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    duration(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     maxQuantity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -506,21 +504,19 @@ export class Minting extends BaseContract {
 
     ogQuantity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    ogs(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setOG(
-      user: string,
+    saveRootOg(
+      _OGRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setWhitelist(
-      user: string,
+    saveRootWhitelist(
+      _whitelistRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -539,22 +535,14 @@ export class Minting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    verifyOG(
-      sender: string,
+    verify(
       proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    verifyWhitelist(
-      sender: string,
-      proof: BytesLike[],
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    whitelist(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    whitelistRoot(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     whitlistQuantity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
