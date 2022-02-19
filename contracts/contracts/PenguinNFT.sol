@@ -5,9 +5,9 @@ import 'erc721a/contracts/ERC721A.sol';
 import '@openzeppelin/contracts/access/AccessControl.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 
-contract Penguin is ERC721A, AccessControl, Ownable {
-    bytes32 constant minter = 'minter';
-    string baseURI;
+contract PenguinNFT is ERC721A, AccessControl, Ownable {
+    bytes32 public constant minter = 'minter';
+    string public baseURI;
 
     constructor() ERC721A('Genesis Penguin', 'GP') {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -22,7 +22,7 @@ contract Penguin is ERC721A, AccessControl, Ownable {
 
     /// @dev set minter address
     /// @param _minter minter address
-    function setMinter(address _minter) public {
+    function setMinter(address _minter) external onlyOwner {
         grantRole(minter, _minter);
     }
 
