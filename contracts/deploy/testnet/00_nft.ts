@@ -2,6 +2,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import { DeployFunction } from 'hardhat-deploy/types'
 
 import { ethers } from 'hardhat'
+const maxSupply = 10000
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments } = hre
@@ -10,7 +11,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   await deploy('PenguinNFT', {
     from: deployer.address,
-    args: [],
+    args: [maxSupply],
     log: true,
   })
 }

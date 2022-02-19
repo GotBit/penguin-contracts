@@ -12,7 +12,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const nft = (await ethers.getContract('PenguinNFT')) as PenguinNFT
   const minting = (await ethers.getContract('Minting')) as Minting
-  const minter_role = await nft.minter()
+  const minter_role = await nft.MINTER_ROLE()
 
   if (!(await nft.hasRole(minter_role, minting.address))) {
     const tx = await nft.setMinter(minting.address)
