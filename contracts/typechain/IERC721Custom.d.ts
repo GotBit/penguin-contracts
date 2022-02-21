@@ -80,21 +80,21 @@ export class IERC721Custom extends BaseContract {
   functions: {
     mint(
       user: string,
-      quantity: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
   mint(
     user: string,
-    quantity: BigNumberish,
+    tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
     mint(
       user: string,
-      quantity: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -104,7 +104,7 @@ export class IERC721Custom extends BaseContract {
   estimateGas: {
     mint(
       user: string,
-      quantity: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -112,7 +112,7 @@ export class IERC721Custom extends BaseContract {
   populateTransaction: {
     mint(
       user: string,
-      quantity: BigNumberish,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

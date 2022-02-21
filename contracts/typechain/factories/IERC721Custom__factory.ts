@@ -16,7 +16,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "quantity",
+        name: "tokenId",
         type: "uint256",
       },
     ],
