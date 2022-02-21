@@ -84,13 +84,6 @@ const config: HardhatUserConfig = {
     disambiguatePaths: false,
     runOnCompile: true,
   },
-  etherscan: {
-    apiKey: {
-      bsc: secrets.bsc_mainnet.api,
-      bscTestnet: secrets.bsc_testnet.api,
-      rinkeby: secrets.rinkeby.api,
-    },
-  },
 }
 
 export default config
