@@ -12,6 +12,7 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -23,20 +24,31 @@ interface MintingInterface extends ethers.utils.Interface {
   functions: {
     "OGRoot()": FunctionFragment;
     "changeDuration(uint256)": FunctionFragment;
+    "claim()": FunctionFragment;
     "duration()": FunctionFragment;
+    "filled(bytes32)": FunctionFragment;
+    "indexes(uint256)": FunctionFragment;
     "maxQuantity()": FunctionFragment;
     "mint(uint256,bytes32[])": FunctionFragment;
+    "mintAmount(bytes32)": FunctionFragment;
     "minted(address)": FunctionFragment;
     "nft()": FunctionFragment;
     "ogQuantity()": FunctionFragment;
     "owner()": FunctionFragment;
+    "randomNumbers(bytes32)": FunctionFragment;
+    "range(uint256,uint256,uint256)": FunctionFragment;
+    "rawFulfillRandomness(bytes32,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "requestIds(address)": FunctionFragment;
+    "router()": FunctionFragment;
     "saveRootOg(bytes32)": FunctionFragment;
     "saveRootWhitelist(bytes32)": FunctionFragment;
+    "spinFeeETH()": FunctionFragment;
     "startDate()": FunctionFragment;
     "startMinting()": FunctionFragment;
     "stopMinting()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "unclaim(bytes32)": FunctionFragment;
     "verify(bytes32[],bytes32,bytes32)": FunctionFragment;
     "whitelistRoot()": FunctionFragment;
     "whitlistQuantity()": FunctionFragment;
@@ -47,7 +59,13 @@ interface MintingInterface extends ethers.utils.Interface {
     functionFragment: "changeDuration",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "claim", values?: undefined): string;
   encodeFunctionData(functionFragment: "duration", values?: undefined): string;
+  encodeFunctionData(functionFragment: "filled", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "indexes",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "maxQuantity",
     values?: undefined
@@ -55,6 +73,10 @@ interface MintingInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "mint",
     values: [BigNumberish, BytesLike[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "mintAmount",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "minted", values: [string]): string;
   encodeFunctionData(functionFragment: "nft", values?: undefined): string;
@@ -64,9 +86,23 @@ interface MintingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "randomNumbers",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "range",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "rawFulfillRandomness",
+    values: [BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "requestIds", values: [string]): string;
+  encodeFunctionData(functionFragment: "router", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "saveRootOg",
     values: [BytesLike]
@@ -74,6 +110,10 @@ interface MintingInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "saveRootWhitelist",
     values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "spinFeeETH",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "startDate", values?: undefined): string;
   encodeFunctionData(
@@ -88,6 +128,7 @@ interface MintingInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "unclaim", values: [BytesLike]): string;
   encodeFunctionData(
     functionFragment: "verify",
     values: [BytesLike[], BytesLike, BytesLike]
@@ -106,25 +147,41 @@ interface MintingInterface extends ethers.utils.Interface {
     functionFragment: "changeDuration",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "duration", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "filled", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "indexes", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "maxQuantity",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintAmount", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "minted", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "nft", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ogQuantity", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "randomNumbers",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "range", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "rawFulfillRandomness",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "requestIds", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "router", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "saveRootOg", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "saveRootWhitelist",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "spinFeeETH", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "startDate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "startMinting",
@@ -138,6 +195,7 @@ interface MintingInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "unclaim", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "verify", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "whitelistRoot",
@@ -210,15 +268,31 @@ export class Minting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    claim(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     duration(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    filled(arg0: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+
+    indexes(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     maxQuantity(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     mint(
       quantity: BigNumberish,
       proof: BytesLike[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    mintAmount(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     minted(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -228,9 +302,31 @@ export class Minting extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    randomNumbers(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    range(
+      number: BigNumberish,
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    rawFulfillRandomness(
+      requestId: BytesLike,
+      randomness: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    requestIds(arg0: string, overrides?: CallOverrides): Promise<[string]>;
+
+    router(overrides?: CallOverrides): Promise<[string]>;
 
     saveRootOg(
       _OGRoot: BytesLike,
@@ -241,6 +337,8 @@ export class Minting extends BaseContract {
       _whitelistRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    spinFeeETH(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     startDate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -256,6 +354,8 @@ export class Minting extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    unclaim(arg0: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
 
     verify(
       proof: BytesLike[],
@@ -276,15 +376,25 @@ export class Minting extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  claim(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   duration(overrides?: CallOverrides): Promise<BigNumber>;
+
+  filled(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+  indexes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   maxQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
   mint(
     quantity: BigNumberish,
     proof: BytesLike[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  mintAmount(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
   minted(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -294,9 +404,28 @@ export class Minting extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  randomNumbers(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+  range(
+    number: BigNumberish,
+    from: BigNumberish,
+    to: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  rawFulfillRandomness(
+    requestId: BytesLike,
+    randomness: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  requestIds(arg0: string, overrides?: CallOverrides): Promise<string>;
+
+  router(overrides?: CallOverrides): Promise<string>;
 
   saveRootOg(
     _OGRoot: BytesLike,
@@ -307,6 +436,8 @@ export class Minting extends BaseContract {
     _whitelistRoot: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  spinFeeETH(overrides?: CallOverrides): Promise<BigNumber>;
 
   startDate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -322,6 +453,8 @@ export class Minting extends BaseContract {
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  unclaim(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
   verify(
     proof: BytesLike[],
@@ -342,7 +475,13 @@ export class Minting extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    claim(overrides?: CallOverrides): Promise<void>;
+
     duration(overrides?: CallOverrides): Promise<BigNumber>;
+
+    filled(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+    indexes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     maxQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -352,6 +491,8 @@ export class Minting extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    mintAmount(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
     minted(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     nft(overrides?: CallOverrides): Promise<string>;
@@ -360,7 +501,29 @@ export class Minting extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    randomNumbers(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    range(
+      number: BigNumberish,
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    rawFulfillRandomness(
+      requestId: BytesLike,
+      randomness: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    requestIds(arg0: string, overrides?: CallOverrides): Promise<string>;
+
+    router(overrides?: CallOverrides): Promise<string>;
 
     saveRootOg(_OGRoot: BytesLike, overrides?: CallOverrides): Promise<void>;
 
@@ -368,6 +531,8 @@ export class Minting extends BaseContract {
       _whitelistRoot: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    spinFeeETH(overrides?: CallOverrides): Promise<BigNumber>;
 
     startDate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -379,6 +544,8 @@ export class Minting extends BaseContract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    unclaim(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
     verify(
       proof: BytesLike[],
@@ -418,15 +585,25 @@ export class Minting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    claim(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     duration(overrides?: CallOverrides): Promise<BigNumber>;
+
+    filled(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    indexes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     maxQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
     mint(
       quantity: BigNumberish,
       proof: BytesLike[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    mintAmount(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     minted(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -436,9 +613,31 @@ export class Minting extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    randomNumbers(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    range(
+      number: BigNumberish,
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    rawFulfillRandomness(
+      requestId: BytesLike,
+      randomness: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    requestIds(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    router(overrides?: CallOverrides): Promise<BigNumber>;
 
     saveRootOg(
       _OGRoot: BytesLike,
@@ -449,6 +648,8 @@ export class Minting extends BaseContract {
       _whitelistRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    spinFeeETH(overrides?: CallOverrides): Promise<BigNumber>;
 
     startDate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -464,6 +665,8 @@ export class Minting extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    unclaim(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     verify(
       proof: BytesLike[],
@@ -485,14 +688,33 @@ export class Minting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    claim(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     duration(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    filled(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    indexes(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     maxQuantity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     mint(
       quantity: BigNumberish,
       proof: BytesLike[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    mintAmount(
+      arg0: BytesLike,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     minted(
@@ -506,9 +728,34 @@ export class Minting extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    randomNumbers(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    range(
+      number: BigNumberish,
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    rawFulfillRandomness(
+      requestId: BytesLike,
+      randomness: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    requestIds(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    router(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     saveRootOg(
       _OGRoot: BytesLike,
@@ -519,6 +766,8 @@ export class Minting extends BaseContract {
       _whitelistRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    spinFeeETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     startDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -533,6 +782,11 @@ export class Minting extends BaseContract {
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    unclaim(
+      arg0: BytesLike,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     verify(
