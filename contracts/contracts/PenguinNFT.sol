@@ -7,7 +7,7 @@ import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 
 contract PenguinNFT is ERC721, AccessControl, Ownable {
     bytes32 public constant MINTER_ROLE = keccak256('MINTER_ROLE');
-    string public baseURI;
+    string public baseURI = 'https://mint-penguinkart.com/';
     uint256 public minted;
     uint256 public maxSupply;
 
