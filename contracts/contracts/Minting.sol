@@ -87,6 +87,17 @@ contract Minting is VRFConsumerBase, Ownable {
     mapping(uint256 => uint256) public indexes;
     uint256 public amount = 10_000;
 
+    event LinkSwaped(
+        uint256 indexed timestamp,
+        address indexed user,
+        uint256 amountProvided,
+        uint256 fee,
+        address addressIn,
+        address addressOut,
+        uint256 amountIn,
+        uint256 amountOut
+    );
+
     /// @dev verifies ogs
     /// @param proof array of bytes for merkle tree verifing
     /// @param root tree's root
@@ -207,7 +218,7 @@ contract Minting is VRFConsumerBase, Ownable {
 
     /// @dev fee of one spin
     /// @return fee amount of fee for one spin in ETH
-    function spinFeeETH() public view returns (uint256) {
+    function feeETH() public view returns (uint256) {
         address[] memory path = new address[](2);
         path[0] = router.WETH();
         path[1] = address(LINK);
@@ -216,7 +227,7 @@ contract Minting is VRFConsumerBase, Ownable {
 
     /// @dev swaps provided amount of ETH to LINK to cover the fee, and transfers back what is left
     function _feeManagment() internal {
-        require(msg.value >= spinFeeETH(), 'Not enough WBNB to pay fee');
+        require(msg.value >= feeETH(), 'Not enough WBNB to pay fee');
 
         address[] memory path = new address[](2);
         path[0] = router.WETH();
@@ -231,16 +242,16 @@ contract Minting is VRFConsumerBase, Ownable {
 
         payable(msg.sender).transfer(msg.value - amounts[0]);
 
-        // emit LinkSwaped(
-        //     block.timestamp,
-        //     msg.sender,
-        //     msg.value,
-        //     spinFeeETH(),
-        //     tokenConverter.WETH(),
-        //     address(LINK),
-        //     amounts[0],
-        //     amounts[1]
-        // );
+        emit LinkSwaped(
+            block.timestamp,
+            msg.sender,
+            msg.value,
+            feeETH(),
+            router.WETH(),
+            address(LINK),
+            amounts[0],
+            amounts[1]
+        );
     }
 
     /// @dev requests random number from chainlink nodes
