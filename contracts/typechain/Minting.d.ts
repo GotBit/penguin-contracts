@@ -27,6 +27,7 @@ interface MintingInterface extends ethers.utils.Interface {
     "changeDuration(uint256)": FunctionFragment;
     "claim()": FunctionFragment;
     "duration()": FunctionFragment;
+    "feeETH()": FunctionFragment;
     "filled(bytes32)": FunctionFragment;
     "indexes(uint256)": FunctionFragment;
     "maxQuantity()": FunctionFragment;
@@ -44,7 +45,6 @@ interface MintingInterface extends ethers.utils.Interface {
     "router()": FunctionFragment;
     "saveRootOg(bytes32)": FunctionFragment;
     "saveRootWhitelist(bytes32)": FunctionFragment;
-    "spinFeeETH()": FunctionFragment;
     "startDate()": FunctionFragment;
     "startMinting()": FunctionFragment;
     "stopMinting()": FunctionFragment;
@@ -63,6 +63,7 @@ interface MintingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "claim", values?: undefined): string;
   encodeFunctionData(functionFragment: "duration", values?: undefined): string;
+  encodeFunctionData(functionFragment: "feeETH", values?: undefined): string;
   encodeFunctionData(functionFragment: "filled", values: [BytesLike]): string;
   encodeFunctionData(
     functionFragment: "indexes",
@@ -113,10 +114,6 @@ interface MintingInterface extends ethers.utils.Interface {
     functionFragment: "saveRootWhitelist",
     values: [BytesLike]
   ): string;
-  encodeFunctionData(
-    functionFragment: "spinFeeETH",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "startDate", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "startMinting",
@@ -152,6 +149,7 @@ interface MintingInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "duration", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "feeETH", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "filled", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "indexes", data: BytesLike): Result;
   decodeFunctionResult(
@@ -184,7 +182,6 @@ interface MintingInterface extends ethers.utils.Interface {
     functionFragment: "saveRootWhitelist",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "spinFeeETH", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "startDate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "startMinting",
@@ -210,11 +207,35 @@ interface MintingInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
+    "LinkSwaped(uint256,address,uint256,uint256,address,address,uint256,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "LinkSwaped"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export type LinkSwapedEvent = TypedEvent<
+  [
+    BigNumber,
+    string,
+    BigNumber,
+    BigNumber,
+    string,
+    string,
+    BigNumber,
+    BigNumber
+  ] & {
+    timestamp: BigNumber;
+    user: string;
+    amountProvided: BigNumber;
+    fee: BigNumber;
+    addressIn: string;
+    addressOut: string;
+    amountIn: BigNumber;
+    amountOut: BigNumber;
+  }
+>;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
@@ -278,6 +299,8 @@ export class Minting extends BaseContract {
     ): Promise<ContractTransaction>;
 
     duration(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    feeETH(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     filled(arg0: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -343,8 +366,6 @@ export class Minting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    spinFeeETH(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     startDate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     startMinting(
@@ -388,6 +409,8 @@ export class Minting extends BaseContract {
   ): Promise<ContractTransaction>;
 
   duration(overrides?: CallOverrides): Promise<BigNumber>;
+
+  feeETH(overrides?: CallOverrides): Promise<BigNumber>;
 
   filled(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
@@ -444,8 +467,6 @@ export class Minting extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  spinFeeETH(overrides?: CallOverrides): Promise<BigNumber>;
-
   startDate(overrides?: CallOverrides): Promise<BigNumber>;
 
   startMinting(
@@ -487,6 +508,8 @@ export class Minting extends BaseContract {
     claim(overrides?: CallOverrides): Promise<void>;
 
     duration(overrides?: CallOverrides): Promise<BigNumber>;
+
+    feeETH(overrides?: CallOverrides): Promise<BigNumber>;
 
     filled(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
@@ -541,8 +564,6 @@ export class Minting extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    spinFeeETH(overrides?: CallOverrides): Promise<BigNumber>;
-
     startDate(overrides?: CallOverrides): Promise<BigNumber>;
 
     startMinting(overrides?: CallOverrides): Promise<void>;
@@ -569,6 +590,70 @@ export class Minting extends BaseContract {
   };
 
   filters: {
+    "LinkSwaped(uint256,address,uint256,uint256,address,address,uint256,uint256)"(
+      timestamp?: BigNumberish | null,
+      user?: string | null,
+      amountProvided?: null,
+      fee?: null,
+      addressIn?: null,
+      addressOut?: null,
+      amountIn?: null,
+      amountOut?: null
+    ): TypedEventFilter<
+      [
+        BigNumber,
+        string,
+        BigNumber,
+        BigNumber,
+        string,
+        string,
+        BigNumber,
+        BigNumber
+      ],
+      {
+        timestamp: BigNumber;
+        user: string;
+        amountProvided: BigNumber;
+        fee: BigNumber;
+        addressIn: string;
+        addressOut: string;
+        amountIn: BigNumber;
+        amountOut: BigNumber;
+      }
+    >;
+
+    LinkSwaped(
+      timestamp?: BigNumberish | null,
+      user?: string | null,
+      amountProvided?: null,
+      fee?: null,
+      addressIn?: null,
+      addressOut?: null,
+      amountIn?: null,
+      amountOut?: null
+    ): TypedEventFilter<
+      [
+        BigNumber,
+        string,
+        BigNumber,
+        BigNumber,
+        string,
+        string,
+        BigNumber,
+        BigNumber
+      ],
+      {
+        timestamp: BigNumber;
+        user: string;
+        amountProvided: BigNumber;
+        fee: BigNumber;
+        addressIn: string;
+        addressOut: string;
+        amountIn: BigNumber;
+        amountOut: BigNumber;
+      }
+    >;
+
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
@@ -601,6 +686,8 @@ export class Minting extends BaseContract {
     ): Promise<BigNumber>;
 
     duration(overrides?: CallOverrides): Promise<BigNumber>;
+
+    feeETH(overrides?: CallOverrides): Promise<BigNumber>;
 
     filled(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -660,8 +747,6 @@ export class Minting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    spinFeeETH(overrides?: CallOverrides): Promise<BigNumber>;
-
     startDate(overrides?: CallOverrides): Promise<BigNumber>;
 
     startMinting(
@@ -706,6 +791,8 @@ export class Minting extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     duration(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    feeETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     filled(
       arg0: BytesLike,
@@ -779,8 +866,6 @@ export class Minting extends BaseContract {
       _whitelistRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    spinFeeETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     startDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
