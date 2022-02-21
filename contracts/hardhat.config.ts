@@ -33,10 +33,15 @@ const config: HardhatUserConfig = {
     ],
   },
   networks: {
+    // hardhat: {
+    //   tags: ['preprod'],
+    //   forking: {
+    //     url: 'https://bsc-dataseed1.defibit.io/',
+    //   },
+    // },
     hardhat: {
-      tags: ['preprod'],
       forking: {
-        url: 'https://bsc-dataseed1.defibit.io/',
+        url: 'https://speedy-nodes-nyc.moralis.io/98446ed04f340c3f804e2ee6/bsc/testnet',
       },
     },
     bsc_mainnet: {
