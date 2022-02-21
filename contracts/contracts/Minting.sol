@@ -170,7 +170,7 @@ contract Minting is VRFConsumerBase, Ownable {
         require(mintQuantity != 0, 'You cant mint zero');
 
         minted[msg.sender] += mintQuantity;
-
+        _feeManagment();
         bytes32 requestId = _getRandomNumber();
         unclaim[requestId] = true;
         mintAmount[requestId] = mintQuantity;

@@ -5,7 +5,7 @@
       "chainId": "97",
       "contracts": {
         "Minting": {
-          "address": "0x707f5b5f227d5d62950FcE614b0850ac6b747559",
+          "address": "0x300Bc88ee371C8baae589B3E7c80c97E56704470",
           "abi": [
             {
               "inputs": [
