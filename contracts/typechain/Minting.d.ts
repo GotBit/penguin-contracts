@@ -23,6 +23,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface MintingInterface extends ethers.utils.Interface {
   functions: {
     "OGRoot()": FunctionFragment;
+    "amount()": FunctionFragment;
     "changeDuration(uint256)": FunctionFragment;
     "claim()": FunctionFragment;
     "duration()": FunctionFragment;
@@ -55,6 +56,7 @@ interface MintingInterface extends ethers.utils.Interface {
   };
 
   encodeFunctionData(functionFragment: "OGRoot", values?: undefined): string;
+  encodeFunctionData(functionFragment: "amount", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "changeDuration",
     values: [BigNumberish]
@@ -143,6 +145,7 @@ interface MintingInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "OGRoot", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "amount", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "changeDuration",
     data: BytesLike
@@ -263,6 +266,8 @@ export class Minting extends BaseContract {
   functions: {
     OGRoot(overrides?: CallOverrides): Promise<[string]>;
 
+    amount(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     changeDuration(
       _duration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -371,6 +376,8 @@ export class Minting extends BaseContract {
 
   OGRoot(overrides?: CallOverrides): Promise<string>;
 
+  amount(overrides?: CallOverrides): Promise<BigNumber>;
+
   changeDuration(
     _duration: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -469,6 +476,8 @@ export class Minting extends BaseContract {
 
   callStatic: {
     OGRoot(overrides?: CallOverrides): Promise<string>;
+
+    amount(overrides?: CallOverrides): Promise<BigNumber>;
 
     changeDuration(
       _duration: BigNumberish,
@@ -580,6 +589,8 @@ export class Minting extends BaseContract {
   estimateGas: {
     OGRoot(overrides?: CallOverrides): Promise<BigNumber>;
 
+    amount(overrides?: CallOverrides): Promise<BigNumber>;
+
     changeDuration(
       _duration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -682,6 +693,8 @@ export class Minting extends BaseContract {
 
   populateTransaction: {
     OGRoot(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    amount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     changeDuration(
       _duration: BigNumberish,

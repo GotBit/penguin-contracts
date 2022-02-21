@@ -5,7 +5,7 @@
       "chainId": "97",
       "contracts": {
         "Minting": {
-          "address": "0x52c29b9d8e07953AA2f98C588E30C75E027384B6",
+          "address": "0x707f5b5f227d5d62950FcE614b0850ac6b747559",
           "abi": [
             {
               "inputs": [
@@ -70,6 +70,19 @@
                   "internalType": "bytes32",
                   "name": "",
                   "type": "bytes32"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "amount",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
                 }
               ],
               "stateMutability": "view",
