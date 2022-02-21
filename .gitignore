@@ -1,0 +1,4 @@
+frontend/
+contracts/
+!README.md
+!.gitignore
