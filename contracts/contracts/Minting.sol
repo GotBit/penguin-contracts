@@ -156,13 +156,14 @@ contract Minting is VRFConsumerBase, Ownable {
             require(isOG || isWhitelist, 'You cant mint the nft right now');
 
             if (isOG) {
-                mintQuantity = (quantity > ogQuantity) ? ogQuantity : quantity;
+                mintQuantity = (quantity > (ogQuantity - minted[msg.sender]))
+                    ? ogQuantity - minted[msg.sender]
+                    : quantity;
             } else if (isWhitelist) {
-                mintQuantity = (quantity > whitlistQuantity)
-                    ? whitlistQuantity
+                mintQuantity = (quantity > whitlistQuantity - minted[msg.sender])
+                    ? whitlistQuantity - minted[msg.sender]
                     : quantity;
             }
-            mintQuantity -= minted[msg.sender];
         } else {
             mintQuantity = quantity > maxQuantity ? maxQuantity : quantity;
         }
