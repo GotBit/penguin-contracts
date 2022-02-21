@@ -67,7 +67,7 @@ const config: HardhatUserConfig = {
     rinkeby: {
       url: node('rinkeby').rpc,
       accounts: secrets.rinkeby.keys,
-      tags: ['dev'],
+      tags: ['test'],
       verify: {
         etherscan: {
           apiKey: secrets.rinkeby.api,
