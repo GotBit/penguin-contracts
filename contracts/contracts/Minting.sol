@@ -6,7 +6,7 @@ import '@chainlink/contracts/src/v0.8/VRFConsumerBase.sol';
 import 'hardhat/console.sol';
 
 interface IERC721Custom {
-    function mint(address user, uint256 quantity) external;
+    function mint(address user, uint256 tokenId) external;
 }
 
 interface IRouter {
@@ -85,7 +85,7 @@ contract Minting is VRFConsumerBase, Ownable {
     mapping(address => uint256) public minted;
 
     mapping(uint256 => uint256) public indexes;
-    uint256 amount = 10_000;
+    uint256 public amount = 10_000;
 
     /// @dev verifies ogs
     /// @param proof array of bytes for merkle tree verifing
