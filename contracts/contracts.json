@@ -1245,7 +1245,7 @@
       "chainId": "97",
       "contracts": {
         "Minting": {
-          "address": "0x969f0161945cd06d9a0522C9D18940e44E052030",
+          "address": "0xf4AA7918C96198666fd35909Aa8fd63d14bd87e0",
           "abi": [
             {
               "inputs": [
@@ -1772,7 +1772,7 @@
           ]
         },
         "PenguinNFT": {
-          "address": "0xA8765B98BF137bC1C64e6205903968906c66Cfd8",
+          "address": "0x5f36561AC1098775da46F639CDe2514e7c513097",
           "abi": [
             {
               "inputs": [
