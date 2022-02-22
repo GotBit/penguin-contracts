@@ -139,6 +139,7 @@ contract Minting is VRFConsumerBase, Ownable {
             mintQuantity = quantity > maxQuantity ? maxQuantity : quantity;
         }
 
+        mintQuantity = mintQuantity > amount ? amount : mintQuantity;
         require(mintQuantity != 0, 'You cant mint zero');
 
         minted[msg.sender] += mintQuantity;
