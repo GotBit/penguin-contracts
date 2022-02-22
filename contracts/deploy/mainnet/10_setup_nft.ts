@@ -26,4 +26,4 @@ export default func
 func.tags = ['Setup nft']
 func.dependencies = ['NFT']
 func.runAtTheEnd = true
-func.skip = async (hre) => !hre.network.tags.main
+func.skip = async (hre) => true

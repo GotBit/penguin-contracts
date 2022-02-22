@@ -207,35 +207,11 @@ interface MintingInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "LinkSwaped(uint256,address,uint256,uint256,address,address,uint256,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "LinkSwaped"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
-
-export type LinkSwapedEvent = TypedEvent<
-  [
-    BigNumber,
-    string,
-    BigNumber,
-    BigNumber,
-    string,
-    string,
-    BigNumber,
-    BigNumber
-  ] & {
-    timestamp: BigNumber;
-    user: string;
-    amountProvided: BigNumber;
-    fee: BigNumber;
-    addressIn: string;
-    addressOut: string;
-    amountIn: BigNumber;
-    amountOut: BigNumber;
-  }
->;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
@@ -590,70 +566,6 @@ export class Minting extends BaseContract {
   };
 
   filters: {
-    "LinkSwaped(uint256,address,uint256,uint256,address,address,uint256,uint256)"(
-      timestamp?: BigNumberish | null,
-      user?: string | null,
-      amountProvided?: null,
-      fee?: null,
-      addressIn?: null,
-      addressOut?: null,
-      amountIn?: null,
-      amountOut?: null
-    ): TypedEventFilter<
-      [
-        BigNumber,
-        string,
-        BigNumber,
-        BigNumber,
-        string,
-        string,
-        BigNumber,
-        BigNumber
-      ],
-      {
-        timestamp: BigNumber;
-        user: string;
-        amountProvided: BigNumber;
-        fee: BigNumber;
-        addressIn: string;
-        addressOut: string;
-        amountIn: BigNumber;
-        amountOut: BigNumber;
-      }
-    >;
-
-    LinkSwaped(
-      timestamp?: BigNumberish | null,
-      user?: string | null,
-      amountProvided?: null,
-      fee?: null,
-      addressIn?: null,
-      addressOut?: null,
-      amountIn?: null,
-      amountOut?: null
-    ): TypedEventFilter<
-      [
-        BigNumber,
-        string,
-        BigNumber,
-        BigNumber,
-        string,
-        string,
-        BigNumber,
-        BigNumber
-      ],
-      {
-        timestamp: BigNumber;
-        user: string;
-        amountProvided: BigNumber;
-        fee: BigNumber;
-        addressIn: string;
-        addressOut: string;
-        amountIn: BigNumber;
-        amountOut: BigNumber;
-      }
-    >;
-
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null

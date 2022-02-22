@@ -44,6 +44,7 @@ interface PenguinNFTInterface extends ethers.utils.Interface {
     "revokeRole(bytes32,address)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "setMaxSupply(uint256)": FunctionFragment;
     "setMinter(address)": FunctionFragment;
     "setURI(string)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -123,6 +124,10 @@ interface PenguinNFTInterface extends ethers.utils.Interface {
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setMaxSupply",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "setMinter", values: [string]): string;
   encodeFunctionData(functionFragment: "setURI", values: [string]): string;
   encodeFunctionData(
@@ -193,6 +198,10 @@ interface PenguinNFTInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMaxSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setMinter", data: BytesLike): Result;
@@ -415,6 +424,11 @@ export class PenguinNFT extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setMaxSupply(
+      maxSupply_: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setMinter(
       _minter: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -547,6 +561,11 @@ export class PenguinNFT extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setMaxSupply(
+    maxSupply_: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setMinter(
     _minter: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -668,6 +687,11 @@ export class PenguinNFT extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setMaxSupply(
+      maxSupply_: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -927,6 +951,11 @@ export class PenguinNFT extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setMaxSupply(
+      maxSupply_: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setMinter(
       _minter: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1068,6 +1097,11 @@ export class PenguinNFT extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setMaxSupply(
+      maxSupply_: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

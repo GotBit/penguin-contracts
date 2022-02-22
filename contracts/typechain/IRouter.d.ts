@@ -11,7 +11,6 @@ import {
   PopulatedTransaction,
   BaseContract,
   ContractTransaction,
-  Overrides,
   PayableOverrides,
   CallOverrides,
 } from "ethers";
@@ -23,26 +22,12 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface IRouterInterface extends ethers.utils.Interface {
   functions: {
     "WETH()": FunctionFragment;
-    "factory()": FunctionFragment;
-    "getAmountIn(uint256,uint256,uint256)": FunctionFragment;
-    "getAmountOut(uint256,uint256,uint256)": FunctionFragment;
     "getAmountsIn(uint256,address[])": FunctionFragment;
     "getAmountsOut(uint256,address[])": FunctionFragment;
     "swapETHForExactTokens(uint256,address[],address,uint256)": FunctionFragment;
-    "swapExactTokensForTokens(uint256,uint256,address[],address,uint256)": FunctionFragment;
-    "swapTokensForExactTokens(uint256,uint256,address[],address,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "WETH", values?: undefined): string;
-  encodeFunctionData(functionFragment: "factory", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "getAmountIn",
-    values: [BigNumberish, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getAmountOut",
-    values: [BigNumberish, BigNumberish, BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "getAmountsIn",
     values: [BigNumberish, string[]]
@@ -55,25 +40,8 @@ interface IRouterInterface extends ethers.utils.Interface {
     functionFragment: "swapETHForExactTokens",
     values: [BigNumberish, string[], string, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "swapExactTokensForTokens",
-    values: [BigNumberish, BigNumberish, string[], string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "swapTokensForExactTokens",
-    values: [BigNumberish, BigNumberish, string[], string, BigNumberish]
-  ): string;
 
   decodeFunctionResult(functionFragment: "WETH", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "factory", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getAmountIn",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getAmountOut",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "getAmountsIn",
     data: BytesLike
@@ -84,14 +52,6 @@ interface IRouterInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "swapETHForExactTokens",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "swapExactTokensForTokens",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "swapTokensForExactTokens",
     data: BytesLike
   ): Result;
 
@@ -144,22 +104,6 @@ export class IRouter extends BaseContract {
   functions: {
     WETH(overrides?: CallOverrides): Promise<[string]>;
 
-    factory(overrides?: CallOverrides): Promise<[string]>;
-
-    getAmountIn(
-      amountOut: BigNumberish,
-      reserveIn: BigNumberish,
-      reserveOut: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { amountIn: BigNumber }>;
-
-    getAmountOut(
-      amountIn: BigNumberish,
-      reserveIn: BigNumberish,
-      reserveOut: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { amountOut: BigNumber }>;
-
     getAmountsIn(
       amountOut: BigNumberish,
       path: string[],
@@ -179,43 +123,9 @@ export class IRouter extends BaseContract {
       deadline: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    swapExactTokensForTokens(
-      amountIn: BigNumberish,
-      amountOutMin: BigNumberish,
-      path: string[],
-      to: string,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    swapTokensForExactTokens(
-      amountOut: BigNumberish,
-      amountInMax: BigNumberish,
-      path: string[],
-      to: string,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
   };
 
   WETH(overrides?: CallOverrides): Promise<string>;
-
-  factory(overrides?: CallOverrides): Promise<string>;
-
-  getAmountIn(
-    amountOut: BigNumberish,
-    reserveIn: BigNumberish,
-    reserveOut: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  getAmountOut(
-    amountIn: BigNumberish,
-    reserveIn: BigNumberish,
-    reserveOut: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
 
   getAmountsIn(
     amountOut: BigNumberish,
@@ -237,42 +147,8 @@ export class IRouter extends BaseContract {
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  swapExactTokensForTokens(
-    amountIn: BigNumberish,
-    amountOutMin: BigNumberish,
-    path: string[],
-    to: string,
-    deadline: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  swapTokensForExactTokens(
-    amountOut: BigNumberish,
-    amountInMax: BigNumberish,
-    path: string[],
-    to: string,
-    deadline: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   callStatic: {
     WETH(overrides?: CallOverrides): Promise<string>;
-
-    factory(overrides?: CallOverrides): Promise<string>;
-
-    getAmountIn(
-      amountOut: BigNumberish,
-      reserveIn: BigNumberish,
-      reserveOut: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getAmountOut(
-      amountIn: BigNumberish,
-      reserveIn: BigNumberish,
-      reserveOut: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     getAmountsIn(
       amountOut: BigNumberish,
@@ -288,24 +164,6 @@ export class IRouter extends BaseContract {
 
     swapETHForExactTokens(
       amountOut: BigNumberish,
-      path: string[],
-      to: string,
-      deadline: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber[]>;
-
-    swapExactTokensForTokens(
-      amountIn: BigNumberish,
-      amountOutMin: BigNumberish,
-      path: string[],
-      to: string,
-      deadline: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber[]>;
-
-    swapTokensForExactTokens(
-      amountOut: BigNumberish,
-      amountInMax: BigNumberish,
       path: string[],
       to: string,
       deadline: BigNumberish,
@@ -318,22 +176,6 @@ export class IRouter extends BaseContract {
   estimateGas: {
     WETH(overrides?: CallOverrides): Promise<BigNumber>;
 
-    factory(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getAmountIn(
-      amountOut: BigNumberish,
-      reserveIn: BigNumberish,
-      reserveOut: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getAmountOut(
-      amountIn: BigNumberish,
-      reserveIn: BigNumberish,
-      reserveOut: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getAmountsIn(
       amountOut: BigNumberish,
       path: string[],
@@ -352,46 +194,12 @@ export class IRouter extends BaseContract {
       to: string,
       deadline: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    swapExactTokensForTokens(
-      amountIn: BigNumberish,
-      amountOutMin: BigNumberish,
-      path: string[],
-      to: string,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    swapTokensForExactTokens(
-      amountOut: BigNumberish,
-      amountInMax: BigNumberish,
-      path: string[],
-      to: string,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     WETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    factory(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getAmountIn(
-      amountOut: BigNumberish,
-      reserveIn: BigNumberish,
-      reserveOut: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getAmountOut(
-      amountIn: BigNumberish,
-      reserveIn: BigNumberish,
-      reserveOut: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     getAmountsIn(
       amountOut: BigNumberish,
       path: string[],
@@ -410,24 +218,6 @@ export class IRouter extends BaseContract {
       to: string,
       deadline: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    swapExactTokensForTokens(
-      amountIn: BigNumberish,
-      amountOutMin: BigNumberish,
-      path: string[],
-      to: string,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    swapTokensForExactTokens(
-      amountOut: BigNumberish,
-      amountInMax: BigNumberish,
-      path: string[],
-      to: string,
-      deadline: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

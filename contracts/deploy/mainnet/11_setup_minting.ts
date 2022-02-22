@@ -19,13 +19,15 @@ function hash(address: string): string {
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments } = hre
   const { deploy } = deployments
-  const [deployer, _, bank] = await ethers.getSigners()
+  const [deployer] = await ethers.getSigners()
   console.log('Setup minting')
 
   const og = wallets.OG.map((w) => hash(w))
   const whitelist = wallets.whitelist.map((w) => hash(w))
   const ogRoot = merkle.calculateRoot(og)
   const whitelistRoot = merkle.calculateRoot(whitelist)
+  console.log(ogRoot)
+  console.log(whitelistRoot)
 
   if (!merkle.verify(merkle.generateProof(og, og[0]), ogRoot, og[0])) return
 
