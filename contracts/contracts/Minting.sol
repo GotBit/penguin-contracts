@@ -10,25 +10,7 @@ interface IERC721Custom {
 }
 
 interface IRouter {
-    function factory() external view returns (address);
-
     function WETH() external view returns (address);
-
-    function swapExactTokensForTokens(
-        uint256 amountIn,
-        uint256 amountOutMin,
-        address[] calldata path,
-        address to,
-        uint256 deadline
-    ) external returns (uint256[] memory amounts);
-
-    function swapTokensForExactTokens(
-        uint256 amountOut,
-        uint256 amountInMax,
-        address[] calldata path,
-        address to,
-        uint256 deadline
-    ) external returns (uint256[] memory amounts);
 
     function swapETHForExactTokens(
         uint256 amountOut,
@@ -36,18 +18,6 @@ interface IRouter {
         address to,
         uint256 deadline
     ) external payable returns (uint256[] memory amounts);
-
-    function getAmountOut(
-        uint256 amountIn,
-        uint256 reserveIn,
-        uint256 reserveOut
-    ) external pure returns (uint256 amountOut);
-
-    function getAmountIn(
-        uint256 amountOut,
-        uint256 reserveIn,
-        uint256 reserveOut
-    ) external pure returns (uint256 amountIn);
 
     function getAmountsOut(uint256 amountIn, address[] calldata path)
         external
@@ -87,17 +57,6 @@ contract Minting is VRFConsumerBase, Ownable {
     mapping(uint256 => uint256) public indexes;
     uint256 public amount = 10_000;
 
-    event LinkSwaped(
-        uint256 indexed timestamp,
-        address indexed user,
-        uint256 amountProvided,
-        uint256 fee,
-        address addressIn,
-        address addressOut,
-        uint256 amountIn,
-        uint256 amountOut
-    );
-
     /// @dev verifies ogs
     /// @param proof array of bytes for merkle tree verifing
     /// @param root tree's root
@@ -129,7 +88,7 @@ contract Minting is VRFConsumerBase, Ownable {
                 uint256(keccak256(abi.encodePacked(randomness, i))),
                 1,
                 amount + 1
-            ); // 1...10000
+            );
 
             uint256 randomTokenId = 0;
 
@@ -157,6 +116,7 @@ contract Minting is VRFConsumerBase, Ownable {
             'Mint have not started yet'
         );
         require(!unclaim[requestIds[msg.sender]]);
+        require(amount > 0, 'Max out');
 
         uint256 mintQuantity = 0;
         if (block.timestamp - startDate < 1 days) {
@@ -189,28 +149,25 @@ contract Minting is VRFConsumerBase, Ownable {
         requestIds[msg.sender] = requestId;
     }
 
-    /// @dev Call start minting event
     function startMinting() external onlyOwner {
         startDate = block.timestamp;
     }
 
-    /// @dev Call start minting event
     function stopMinting() external onlyOwner {
         startDate = 0;
     }
 
-    /// @dev Call start minting event
     function changeDuration(uint256 _duration) external onlyOwner {
         duration = _duration;
     }
 
-    /// @dev Set whitelist Root
+    /// @dev sets og Root
     /// @param _OGRoot OG's tree root
     function saveRootOg(bytes32 _OGRoot) external onlyOwner {
         OGRoot = _OGRoot;
     }
 
-    /// @dev Set whitelist Root
+    /// @dev sets whitelist Root
     /// @param _whitelistRoot whitelist's tree root
     function saveRootWhitelist(bytes32 _whitelistRoot) external onlyOwner {
         whitelistRoot = _whitelistRoot;
@@ -241,17 +198,6 @@ contract Minting is VRFConsumerBase, Ownable {
         );
 
         payable(msg.sender).transfer(msg.value - amounts[0]);
-
-        emit LinkSwaped(
-            block.timestamp,
-            msg.sender,
-            msg.value,
-            feeETH(),
-            router.WETH(),
-            address(LINK),
-            amounts[0],
-            amounts[1]
-        );
     }
 
     /// @dev requests random number from chainlink nodes
@@ -264,9 +210,6 @@ contract Minting is VRFConsumerBase, Ownable {
     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
         randomNumbers[requestId] = randomness;
         filled[requestId] = true;
-        // games[requestId].randomness = randomness;
-        // games[requestId].fulfilled = true;
-        // emit Fulfilled(block.timestamp, requestId);
     }
 
     /// @dev to recieve native from router
