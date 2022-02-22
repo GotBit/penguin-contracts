@@ -74,10 +74,21 @@ const config: HardhatUserConfig = {
         },
       },
     },
+    eth_mainnet: {
+      url: node('eth_mainnet').rpc,
+      accounts: secrets.eth_mainnet.keys,
+      tags: ['main'],
+      verify: {
+        etherscan: {
+          apiKey: secrets.eth_mainnet.api,
+        },
+      },
+    },
   },
   gasReporter: {
     enabled: true,
-    currency: 'USD',
+    currency: 'ETH',
+    gasPrice: 60,
   },
   contractSizer: {
     alphaSort: true,

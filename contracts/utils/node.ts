@@ -26,6 +26,12 @@ export function node(name: string): Node {
         rpc: `https://speedy-nodes-nyc.moralis.io/${secrets.moralis}/eth/rinkeby`,
         chainId: 4,
       }
+    case 'eth_mainnet':
+      return {
+        name,
+        rpc: `https://speedy-nodes-nyc.moralis.io/${secrets.moralis}/eth/mainnet`,
+        chainId: 1,
+      }
   }
   return {} as Node
 }
