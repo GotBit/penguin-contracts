@@ -4,7 +4,7 @@ pragma solidity ^0.8.10;
 import '@openzeppelin/contracts/access/Ownable.sol';
 import {IERC721Custom} from './Minting.sol';
 
-interface Minting {
+interface OldMinting {
     function amount() external view returns (uint256);
 
     function indexes(uint256 index) external view returns (uint256);
@@ -12,7 +12,7 @@ interface Minting {
 
 contract PublicMinting is Ownable {
     IERC721Custom public nft;
-    Minting public minting;
+    OldMinting public minting;
 
     uint256 public startTimestamp;
     uint256 public duration = 7 days;
@@ -35,8 +35,26 @@ contract PublicMinting is Ownable {
     /// @dev mints nft to user
     /// @param quantity amount of nft to mint
     function mint(uint256 quantity) external {
-        require(startTimestamp > 0, 'Minting has not started');
+        require(startTimestamp > 0, 'Minting has not been started');
+        _mint(quantity, msg.sender);
+    }
 
+    /// @dev mints nfts for user by owner
+    /// @param quantities amount of nft to mint
+    /// @param users users
+    function mintMass(uint256[] memory quantities, address[] memory users)
+        external
+        onlyOwner
+    {
+        require(startTimestamp == 0, 'Minting has been started');
+        require(quantities.length == users.length, 'Different sizes');
+        uint256 length = quantities.length;
+        for (uint256 i = 0; i < length; i++) {
+            _mint(quantities[i], users[i]);
+        }
+    }
+
+    function _mint(uint256 quantity, address user) internal {
         // quantity = min(quantity, maxQuantity, amount)
         quantity = quantity > maxQuantity ? maxQuantity : quantity;
         quantity = quantity > amount ? amount : quantity;
@@ -47,8 +65,8 @@ contract PublicMinting is Ownable {
             uint256 index = range(randomness, 1, amount + 1);
             uint256 realIndex = getIndex(index);
             setIndex(index);
-            nft.mint(msg.sender, realIndex);
-            emit Mint(block.timestamp, msg.sender, realIndex);
+            nft.mint(user, realIndex);
+            emit Mint(block.timestamp, user, realIndex);
         }
     }
 
@@ -65,7 +83,7 @@ contract PublicMinting is Ownable {
         uint256 result = indexes[amount];
         if (result == 0) result = minting.indexes(amount);
         if (result == 0) result = amount;
-        indexes[index] = amount;
+        indexes[index] = result;
         amount--;
     }
 
@@ -127,6 +145,8 @@ contract PublicMinting is Ownable {
     /// @dev contructor
     constructor(address nft_, address minting_) {
         nft = IERC721Custom(nft_);
-        minting = Minting(minting_);
+        minting = OldMinting(minting_);
+
+        amount = minting.amount();
     }
 }
