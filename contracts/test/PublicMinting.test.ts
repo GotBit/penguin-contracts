@@ -48,6 +48,64 @@ describe('PublicMinting', () => {
 
       await expect(publicMinting.connect(user).start()).reverted
     })
-    it('should stop ', async () => {})
+    it('should stop', async () => {
+      const { publicMinting } = await setup()
+      const [, user] = await ethers.getSigners()
+
+      const owner = await fork.impersonateAccount(await publicMinting.owner())
+
+      await publicMinting.connect(owner).stop()
+      expect(await publicMinting.startTimestamp()).to.be.eq(0)
+
+      await expect(publicMinting.connect(user).stop()).reverted
+    })
+    it('should mint to user', async () => {
+      const { publicMinting, nft } = await setup()
+
+      const users = []
+      const quantities = []
+      for (let i = 0; i < 10; i++) users.push(ethers.Wallet.createRandom().address)
+      for (let i = 0; i < 10; i++) quantities.push(2)
+      await publicMinting.mintMass(quantities, users)
+      for (let i = 0; i < 10; i++) {
+        expect(await nft.balanceOf(users[i])).to.be.eq(quantities[i])
+      }
+      await publicMinting.start()
+
+      await expect(publicMinting.mintMass(quantities, users)).reverted
+    })
+  })
+  describe('Minting', () => {
+    it('should mint max quantity', async () => {
+      const { publicMinting } = await setup()
+
+      await publicMinting.start()
+      const maxQuantity = await publicMinting.maxQuantity()
+
+      let amountBefore = await publicMinting.amount()
+      await publicMinting.mint(maxQuantity)
+      let amountAfter = await publicMinting.amount()
+      expect(amountBefore.sub(amountAfter)).to.be.eq(maxQuantity)
+
+      amountBefore = await publicMinting.amount()
+      await publicMinting.mint(maxQuantity.add(100))
+      amountAfter = await publicMinting.amount()
+      expect(amountBefore.sub(amountAfter)).to.be.eq(maxQuantity)
+
+      amountBefore = await publicMinting.amount()
+      await publicMinting.mint(1)
+      amountAfter = await publicMinting.amount()
+      expect(amountBefore.sub(amountAfter)).to.be.eq(1)
+    })
+    it('should mint all without problem', async () => {
+      const { publicMinting } = await setup()
+      const [, user] = await ethers.getSigners()
+
+      await publicMinting.start()
+
+      for (let i = 0; i < 5; i++) {
+        await publicMinting.connect(user).mint(20)
+      }
+    })
   })
 })
