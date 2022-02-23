@@ -39,6 +39,7 @@ interface PublicMintingInterface extends ethers.utils.Interface {
     "start()": FunctionFragment;
     "startTimestamp()": FunctionFragment;
     "stop()": FunctionFragment;
+    "syncAmount()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
@@ -91,6 +92,10 @@ interface PublicMintingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "stop", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "syncAmount",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
@@ -131,6 +136,7 @@ interface PublicMintingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "stop", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "syncAmount", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -143,6 +149,7 @@ interface PublicMintingInterface extends ethers.utils.Interface {
     "SetMaxQuantity(uint256,address,uint256)": EventFragment;
     "Start(uint256,address)": EventFragment;
     "Stop(uint256,address)": EventFragment;
+    "SyncAmount(uint256,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
@@ -151,6 +158,7 @@ interface PublicMintingInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "SetMaxQuantity"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Start"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Stop"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SyncAmount"): EventFragment;
 }
 
 export type MintEvent = TypedEvent<
@@ -187,6 +195,14 @@ export type StartEvent = TypedEvent<
 
 export type StopEvent = TypedEvent<
   [BigNumber, string] & { timestamp: BigNumber; user: string }
+>;
+
+export type SyncAmountEvent = TypedEvent<
+  [BigNumber, string, BigNumber] & {
+    timestamp: BigNumber;
+    user: string;
+    amount: BigNumber;
+  }
 >;
 
 export class PublicMinting extends BaseContract {
@@ -300,6 +316,10 @@ export class PublicMinting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    syncAmount(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -370,6 +390,10 @@ export class PublicMinting extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  syncAmount(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -430,6 +454,8 @@ export class PublicMinting extends BaseContract {
     startTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     stop(overrides?: CallOverrides): Promise<void>;
+
+    syncAmount(overrides?: CallOverrides): Promise<void>;
 
     transferOwnership(
       newOwner: string,
@@ -539,6 +565,24 @@ export class PublicMinting extends BaseContract {
       [BigNumber, string],
       { timestamp: BigNumber; user: string }
     >;
+
+    "SyncAmount(uint256,address,uint256)"(
+      timestamp?: BigNumberish | null,
+      user?: string | null,
+      amount?: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber],
+      { timestamp: BigNumber; user: string; amount: BigNumber }
+    >;
+
+    SyncAmount(
+      timestamp?: BigNumberish | null,
+      user?: string | null,
+      amount?: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber],
+      { timestamp: BigNumber; user: string; amount: BigNumber }
+    >;
   };
 
   estimateGas: {
@@ -603,6 +647,10 @@ export class PublicMinting extends BaseContract {
     startTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     stop(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    syncAmount(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -677,6 +725,10 @@ export class PublicMinting extends BaseContract {
     startTimestamp(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     stop(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    syncAmount(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
