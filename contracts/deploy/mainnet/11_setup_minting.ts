@@ -7,7 +7,7 @@ import { Minting, PenguinNFT } from '../../typechain'
 const addressOG = '0x4E1602505a69Ad2De90Fe1CD65d198f60781Ad73'
 const addressWhitelist = '0x1EEcF3334A3b9C07048Ed82717b2405A82F88569'
 
-import wallets from '../../../script/wallets.json'
+import wallets from '../../wallets.json'
 import merkle from '../../utils'
 
 function hash(address: string): string {
