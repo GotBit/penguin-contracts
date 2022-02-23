@@ -18,25 +18,22 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface MintingInterface extends ethers.utils.Interface {
+interface MerkleInterface extends ethers.utils.Interface {
   functions: {
-    "amount()": FunctionFragment;
-    "indexes(uint256)": FunctionFragment;
+    "verify(bytes32[],bytes32,bytes32)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "amount", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "indexes",
-    values: [BigNumberish]
+    functionFragment: "verify",
+    values: [BytesLike[], BytesLike, BytesLike]
   ): string;
 
-  decodeFunctionResult(functionFragment: "amount", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "indexes", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "verify", data: BytesLike): Result;
 
   events: {};
 }
 
-export class Minting extends BaseContract {
+export class Merkle extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -77,40 +74,49 @@ export class Minting extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: MintingInterface;
+  interface: MerkleInterface;
 
   functions: {
-    amount(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    indexes(
-      index: BigNumberish,
+    verify(
+      proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[boolean]>;
   };
 
-  amount(overrides?: CallOverrides): Promise<BigNumber>;
-
-  indexes(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+  verify(
+    proof: BytesLike[],
+    root: BytesLike,
+    leaf: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   callStatic: {
-    amount(overrides?: CallOverrides): Promise<BigNumber>;
-
-    indexes(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    verify(
+      proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
   };
 
   filters: {};
 
   estimateGas: {
-    amount(overrides?: CallOverrides): Promise<BigNumber>;
-
-    indexes(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    verify(
+      proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    amount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    indexes(
-      index: BigNumberish,
+    verify(
+      proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

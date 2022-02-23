@@ -125,7 +125,7 @@ contract PublicMinting is Ownable {
     }
 
     /// @dev contructor
-    constructor(address minting_, address nft_) {
+    constructor(address nft_, address minting_) {
         nft = IERC721Custom(nft_);
         minting = Minting(minting_);
     }

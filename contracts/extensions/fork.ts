@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
-import { BigNumberish } from 'ethers'
+import { BigNumber } from 'ethers'
 import { extendEnvironment } from 'hardhat/config'
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
 
@@ -28,8 +28,11 @@ export class ForkPlugin {
     return this.hre.ethers.getSigner(address)
   }
 
-  async setBalance(address: string, balance: BigNumberish) {
-    await this.hre.network.provider.send(this.methods.SET_BALANCE, [address, balance])
+  async setBalance(address: string, balance: BigNumber) {
+    await this.hre.network.provider.request({
+      method: this.methods.SET_BALANCE,
+      params: [address, balance.toHexString().replace('0x0', '0x')],
+    })
   }
 }
 
