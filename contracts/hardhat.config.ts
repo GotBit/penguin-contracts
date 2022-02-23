@@ -8,6 +8,7 @@ import 'hardhat-contract-sizer'
 import 'hardhat-deploy'
 
 import './extensions/time'
+import './extensions/fork'
 import './extensions/bignumber'
 import './extensions/string'
 
@@ -43,7 +44,6 @@ const config: HardhatUserConfig = {
       tags: ['fork'],
       forking: {
         url: node('eth_mainnet').rpc,
-        blockNumber: 14262400,
       },
     },
     bsc_mainnet: {
