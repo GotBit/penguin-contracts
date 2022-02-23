@@ -39,15 +39,11 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    // hardhat: {
-    //   tags: ['preprod'],
-    //   forking: {
-    //     url: 'https://bsc-dataseed1.defibit.io/',
-    //   },
-    // },
     hardhat: {
+      tags: ['fork'],
       forking: {
-        url: 'https://speedy-nodes-nyc.moralis.io/98446ed04f340c3f804e2ee6/bsc/testnet',
+        url: node('eth_mainnet').rpc,
+        blockNumber: 14262400,
       },
     },
     bsc_mainnet: {
