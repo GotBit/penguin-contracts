@@ -11,6 +11,8 @@ import {
   PopulatedTransaction,
   BaseContract,
   ContractTransaction,
+  Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -20,21 +22,200 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MintingInterface extends ethers.utils.Interface {
   functions: {
+    "OGRoot()": FunctionFragment;
     "amount()": FunctionFragment;
+    "changeDuration(uint256)": FunctionFragment;
+    "claim()": FunctionFragment;
+    "duration()": FunctionFragment;
+    "feeETH()": FunctionFragment;
+    "filled(bytes32)": FunctionFragment;
     "indexes(uint256)": FunctionFragment;
+    "maxQuantity()": FunctionFragment;
+    "mint(uint256,bytes32[])": FunctionFragment;
+    "mintAmount(bytes32)": FunctionFragment;
+    "minted(address)": FunctionFragment;
+    "nft()": FunctionFragment;
+    "ogQuantity()": FunctionFragment;
+    "owner()": FunctionFragment;
+    "randomNumbers(bytes32)": FunctionFragment;
+    "range(uint256,uint256,uint256)": FunctionFragment;
+    "rawFulfillRandomness(bytes32,uint256)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "requestIds(address)": FunctionFragment;
+    "router()": FunctionFragment;
+    "saveRootOg(bytes32)": FunctionFragment;
+    "saveRootWhitelist(bytes32)": FunctionFragment;
+    "startDate()": FunctionFragment;
+    "startMinting()": FunctionFragment;
+    "stopMinting()": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "unclaim(bytes32)": FunctionFragment;
+    "verify(bytes32[],bytes32,bytes32)": FunctionFragment;
+    "whitelistRoot()": FunctionFragment;
+    "whitlistQuantity()": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "OGRoot", values?: undefined): string;
   encodeFunctionData(functionFragment: "amount", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "changeDuration",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "claim", values?: undefined): string;
+  encodeFunctionData(functionFragment: "duration", values?: undefined): string;
+  encodeFunctionData(functionFragment: "feeETH", values?: undefined): string;
+  encodeFunctionData(functionFragment: "filled", values: [BytesLike]): string;
   encodeFunctionData(
     functionFragment: "indexes",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "maxQuantity",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "mint",
+    values: [BigNumberish, BytesLike[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "mintAmount",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(functionFragment: "minted", values: [string]): string;
+  encodeFunctionData(functionFragment: "nft", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "ogQuantity",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "randomNumbers",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "range",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "rawFulfillRandomness",
+    values: [BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "requestIds", values: [string]): string;
+  encodeFunctionData(functionFragment: "router", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "saveRootOg",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "saveRootWhitelist",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(functionFragment: "startDate", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "startMinting",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "stopMinting",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
+  encodeFunctionData(functionFragment: "unclaim", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "verify",
+    values: [BytesLike[], BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "whitelistRoot",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "whitlistQuantity",
+    values?: undefined
+  ): string;
 
+  decodeFunctionResult(functionFragment: "OGRoot", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "amount", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "changeDuration",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "duration", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "feeETH", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "filled", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "indexes", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "maxQuantity",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintAmount", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "minted", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "nft", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ogQuantity", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "randomNumbers",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "range", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "rawFulfillRandomness",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "requestIds", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "router", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "saveRootOg", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "saveRootWhitelist",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "startDate", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "startMinting",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "stopMinting",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "unclaim", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "verify", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "whitelistRoot",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "whitlistQuantity",
+    data: BytesLike
+  ): Result;
 
-  events: {};
+  events: {
+    "OwnershipTransferred(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
+>;
 
 export class Minting extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -80,38 +261,553 @@ export class Minting extends BaseContract {
   interface: MintingInterface;
 
   functions: {
+    OGRoot(overrides?: CallOverrides): Promise<[string]>;
+
     amount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    changeDuration(
+      _duration: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    claim(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    duration(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    feeETH(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    filled(arg0: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+
     indexes(
-      index: BigNumberish,
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    maxQuantity(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    mint(
+      quantity: BigNumberish,
+      proof: BytesLike[],
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    mintAmount(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    minted(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    nft(overrides?: CallOverrides): Promise<[string]>;
+
+    ogQuantity(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
+    randomNumbers(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    range(
+      number: BigNumberish,
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    rawFulfillRandomness(
+      requestId: BytesLike,
+      randomness: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    requestIds(arg0: string, overrides?: CallOverrides): Promise<[string]>;
+
+    router(overrides?: CallOverrides): Promise<[string]>;
+
+    saveRootOg(
+      _OGRoot: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    saveRootWhitelist(
+      _whitelistRoot: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    startDate(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    startMinting(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    stopMinting(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    unclaim(arg0: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+
+    verify(
+      proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    whitelistRoot(overrides?: CallOverrides): Promise<[string]>;
+
+    whitlistQuantity(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
+
+  OGRoot(overrides?: CallOverrides): Promise<string>;
 
   amount(overrides?: CallOverrides): Promise<BigNumber>;
 
-  indexes(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+  changeDuration(
+    _duration: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  claim(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  duration(overrides?: CallOverrides): Promise<BigNumber>;
+
+  feeETH(overrides?: CallOverrides): Promise<BigNumber>;
+
+  filled(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+  indexes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+  maxQuantity(overrides?: CallOverrides): Promise<BigNumber>;
+
+  mint(
+    quantity: BigNumberish,
+    proof: BytesLike[],
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  mintAmount(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+  minted(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+  nft(overrides?: CallOverrides): Promise<string>;
+
+  ogQuantity(overrides?: CallOverrides): Promise<BigNumber>;
+
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  randomNumbers(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+  range(
+    number: BigNumberish,
+    from: BigNumberish,
+    to: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  rawFulfillRandomness(
+    requestId: BytesLike,
+    randomness: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  requestIds(arg0: string, overrides?: CallOverrides): Promise<string>;
+
+  router(overrides?: CallOverrides): Promise<string>;
+
+  saveRootOg(
+    _OGRoot: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  saveRootWhitelist(
+    _whitelistRoot: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  startDate(overrides?: CallOverrides): Promise<BigNumber>;
+
+  startMinting(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  stopMinting(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  unclaim(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+  verify(
+    proof: BytesLike[],
+    root: BytesLike,
+    leaf: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  whitelistRoot(overrides?: CallOverrides): Promise<string>;
+
+  whitlistQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
+    OGRoot(overrides?: CallOverrides): Promise<string>;
+
     amount(overrides?: CallOverrides): Promise<BigNumber>;
 
-    indexes(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    changeDuration(
+      _duration: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    claim(overrides?: CallOverrides): Promise<void>;
+
+    duration(overrides?: CallOverrides): Promise<BigNumber>;
+
+    feeETH(overrides?: CallOverrides): Promise<BigNumber>;
+
+    filled(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+    indexes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    maxQuantity(overrides?: CallOverrides): Promise<BigNumber>;
+
+    mint(
+      quantity: BigNumberish,
+      proof: BytesLike[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    mintAmount(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    minted(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    nft(overrides?: CallOverrides): Promise<string>;
+
+    ogQuantity(overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    randomNumbers(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    range(
+      number: BigNumberish,
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    rawFulfillRandomness(
+      requestId: BytesLike,
+      randomness: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    requestIds(arg0: string, overrides?: CallOverrides): Promise<string>;
+
+    router(overrides?: CallOverrides): Promise<string>;
+
+    saveRootOg(_OGRoot: BytesLike, overrides?: CallOverrides): Promise<void>;
+
+    saveRootWhitelist(
+      _whitelistRoot: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    startDate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    startMinting(overrides?: CallOverrides): Promise<void>;
+
+    stopMinting(overrides?: CallOverrides): Promise<void>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    unclaim(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+    verify(
+      proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    whitelistRoot(overrides?: CallOverrides): Promise<string>;
+
+    whitlistQuantity(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
-  filters: {};
+  filters: {
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+  };
 
   estimateGas: {
+    OGRoot(overrides?: CallOverrides): Promise<BigNumber>;
+
     amount(overrides?: CallOverrides): Promise<BigNumber>;
 
-    indexes(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    changeDuration(
+      _duration: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    claim(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    duration(overrides?: CallOverrides): Promise<BigNumber>;
+
+    feeETH(overrides?: CallOverrides): Promise<BigNumber>;
+
+    filled(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    indexes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    maxQuantity(overrides?: CallOverrides): Promise<BigNumber>;
+
+    mint(
+      quantity: BigNumberish,
+      proof: BytesLike[],
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    mintAmount(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    minted(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    nft(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ogQuantity(overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    randomNumbers(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    range(
+      number: BigNumberish,
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    rawFulfillRandomness(
+      requestId: BytesLike,
+      randomness: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    requestIds(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    router(overrides?: CallOverrides): Promise<BigNumber>;
+
+    saveRootOg(
+      _OGRoot: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    saveRootWhitelist(
+      _whitelistRoot: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    startDate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    startMinting(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    stopMinting(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    unclaim(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    verify(
+      proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    whitelistRoot(overrides?: CallOverrides): Promise<BigNumber>;
+
+    whitlistQuantity(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    OGRoot(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     amount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    indexes(
-      index: BigNumberish,
+    changeDuration(
+      _duration: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    claim(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    duration(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    feeETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    filled(
+      arg0: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    indexes(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    maxQuantity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    mint(
+      quantity: BigNumberish,
+      proof: BytesLike[],
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    mintAmount(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    minted(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    nft(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    ogQuantity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    randomNumbers(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    range(
+      number: BigNumberish,
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    rawFulfillRandomness(
+      requestId: BytesLike,
+      randomness: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    requestIds(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    router(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    saveRootOg(
+      _OGRoot: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    saveRootWhitelist(
+      _whitelistRoot: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    startDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    startMinting(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    stopMinting(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    unclaim(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    verify(
+      proof: BytesLike[],
+      root: BytesLike,
+      leaf: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    whitelistRoot(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    whitlistQuantity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

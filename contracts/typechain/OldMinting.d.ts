@@ -18,19 +18,25 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface MercleInterface extends ethers.utils.Interface {
+interface OldMintingInterface extends ethers.utils.Interface {
   functions: {
-    "verify()": FunctionFragment;
+    "amount()": FunctionFragment;
+    "indexes(uint256)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "verify", values?: undefined): string;
+  encodeFunctionData(functionFragment: "amount", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "indexes",
+    values: [BigNumberish]
+  ): string;
 
-  decodeFunctionResult(functionFragment: "verify", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "amount", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "indexes", data: BytesLike): Result;
 
   events: {};
 }
 
-export class Mercle extends BaseContract {
+export class OldMinting extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -71,25 +77,41 @@ export class Mercle extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: MercleInterface;
+  interface: OldMintingInterface;
 
   functions: {
-    verify(overrides?: CallOverrides): Promise<[string]>;
+    amount(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    indexes(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
   };
 
-  verify(overrides?: CallOverrides): Promise<string>;
+  amount(overrides?: CallOverrides): Promise<BigNumber>;
+
+  indexes(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
-    verify(overrides?: CallOverrides): Promise<string>;
+    amount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    indexes(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {};
 
   estimateGas: {
-    verify(overrides?: CallOverrides): Promise<BigNumber>;
+    amount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    indexes(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    verify(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    amount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    indexes(
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
   };
 }

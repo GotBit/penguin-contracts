@@ -28,6 +28,7 @@ interface PublicMintingInterface extends ethers.utils.Interface {
     "indexes(uint256)": FunctionFragment;
     "maxQuantity()": FunctionFragment;
     "mint(uint256)": FunctionFragment;
+    "mintMass(uint256[],address[])": FunctionFragment;
     "minting()": FunctionFragment;
     "nft()": FunctionFragment;
     "owner()": FunctionFragment;
@@ -60,6 +61,10 @@ interface PublicMintingInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "mint", values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "mintMass",
+    values: [BigNumberish[], string[]]
+  ): string;
   encodeFunctionData(functionFragment: "minting", values?: undefined): string;
   encodeFunctionData(functionFragment: "nft", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -103,6 +108,7 @@ interface PublicMintingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintMass", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "minting", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "nft", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -251,6 +257,12 @@ export class PublicMinting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    mintMass(
+      quantities: BigNumberish[],
+      users: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     minting(overrides?: CallOverrides): Promise<[string]>;
 
     nft(overrides?: CallOverrides): Promise<[string]>;
@@ -315,6 +327,12 @@ export class PublicMinting extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  mintMass(
+    quantities: BigNumberish[],
+    users: string[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   minting(overrides?: CallOverrides): Promise<string>;
 
   nft(overrides?: CallOverrides): Promise<string>;
@@ -375,6 +393,12 @@ export class PublicMinting extends BaseContract {
     maxQuantity(overrides?: CallOverrides): Promise<BigNumber>;
 
     mint(quantity: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    mintMass(
+      quantities: BigNumberish[],
+      users: string[],
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     minting(overrides?: CallOverrides): Promise<string>;
 
@@ -539,6 +563,12 @@ export class PublicMinting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    mintMass(
+      quantities: BigNumberish[],
+      users: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     minting(overrides?: CallOverrides): Promise<BigNumber>;
 
     nft(overrides?: CallOverrides): Promise<BigNumber>;
@@ -604,6 +634,12 @@ export class PublicMinting extends BaseContract {
 
     mint(
       quantity: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    mintMass(
+      quantities: BigNumberish[],
+      users: string[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
