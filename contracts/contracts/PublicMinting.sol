@@ -24,6 +24,7 @@ contract PublicMinting is Ownable {
     event Start(uint256 indexed timestamp, address indexed user);
     event Stop(uint256 indexed timestamp, address indexed user);
     event Mint(uint256 indexed timestamp, address indexed user, uint256 tokenId);
+    event SyncAmount(uint256 indexed timestamp, address indexed user, uint256 amount);
 
     event SetMaxQuantity(
         uint256 indexed timestamp,
@@ -114,6 +115,12 @@ contract PublicMinting is Ownable {
         emit SetDuration(block.timestamp, msg.sender, duration_);
     }
 
+    /// @dev syncs amount from old minting
+    function syncAmount() external onlyOwner {
+        amount = minting.amount();
+        emit SyncAmount(block.timestamp, msg.sender, amount);
+    }
+
     /// @dev generates random number
     function getRandomNumber() public view returns (uint256) {
         return
@@ -146,7 +153,5 @@ contract PublicMinting is Ownable {
     constructor(address nft_, address minting_) {
         nft = IERC721Custom(nft_);
         minting = OldMinting(minting_);
-
-        amount = minting.amount();
     }
 }
